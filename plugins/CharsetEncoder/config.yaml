@@ -1,0 +1,29 @@
+# CharsetEncoder
+#
+# Release 0.01 (May 25, 2010)
+# Release 0.02 (May 28, 2010) add XML declaration.
+# Release 0.03 (Jun 22, 2010) fixed bug.
+# Release 0.04 (Jul 08, 2010) fixed bug.
+#
+# Copyright (c) 2004-2010 Yujiro Araki
+
+name: CharsetEncoder
+id: CharsetEncoder
+version: 0.04
+author_link: http://www.koikikukan.com/
+author_name: Yujiro Araki
+plugin_link: http://www.koikikukan.com/archives/2010/05/25-015555.php
+doc_link: http://www.koikikukan.com/archives/2010/05/25-015555.php
+description: <__trans phrase="Transfer charset encoding.">
+l10n_lexicon:
+    ja:
+        Transfer charset encoding.: ウェブサイト／ブログの文字エンコーディングを行います。
+        Charset Encoding: ウェブサイト／ブログの<br />文字エンコーディング
+        (default): （デフォルト）
+blog_config_template: config.tmpl
+settings:
+    encoding:
+        scope: blog
+        default: 'utf-8'
+callbacks:
+    build_page: $CharsetEncoder::CharsetEncoder::encode
