@@ -1,5 +1,23 @@
 <mtapp:setting
+  id="enable_thisblog"
+  label="<__trans phrase="Enable ChangeEncoding in this blog">">
+  <input type="radio" name="enable_thisblog" value="1" <mt:if name="enable_thisblog">checked="checked"</mt:if> /> <__trans phrase="Enable">
+  &nbsp;&nbsp;
+  <input type="radio" name="enable_thisblog" value="0" <mt:unless name="enable_thisblog">checked="checked"</mt:unless> /> <__trans phrase="Disable">
+</mtapp:setting>
+<mtapp:setting
+  id="enable_thisblog"
+  label="<__trans phrase="ChangeEncoding on each Template">">
+  <input type="radio" name="each_template" value="1" <mt:if name="each_template">checked="checked"</mt:if> /> <__trans phrase="Each Template">
+  &nbsp;&nbsp;
+  <input type="radio" name="each_template" value="0" <mt:unless name="each_template">checked="checked"</mt:unless> /> <__trans phrase="All Templates">
+</mtapp:setting>
+<mtapp:setting
   id="encoding"
   label="<__trans phrase="Charset Encoding">">
-  <input type="radio" name="encoding" value="utf-8" <mt:if name="encoding" eq="utf-8">checked="checked"</mt:if> /> UTF-8<__trans phrase="(default)">&nbsp;<input type="radio" name="encoding" value="euc-jp" <mt:if name="encoding" eq="euc-jp">checked="checked"</mt:if> /> EUC-JP&nbsp;&nbsp;<input type="radio" name="encoding" value="shift_jis" <mt:if name="encoding" eq="shift_jis">checked="checked"</mt:if> /> Shift_JIS
+  <input type="radio" name="encoding" value="utf-8" <mt:if name="encoding" eq="utf-8">checked="checked"</mt:if> /> UTF-8<__trans phrase="(default)">
+  &nbsp;
+  <input type="radio" name="encoding" value="euc-jp" <mt:if name="encoding" eq="euc-jp">checked="checked"</mt:if> /> EUC-JP
+  &nbsp;&nbsp;
+  <input type="radio" name="encoding" value="shift_jis" <mt:if name="encoding" eq="shift_jis">checked="checked"</mt:if> /> Shift_JIS
 </mtapp:setting>

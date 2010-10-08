@@ -19,11 +19,28 @@ l10n_lexicon:
     ja:
         Transfer charset encoding.: ウェブサイト／ブログの文字エンコーディングを行います。
         Charset Encoding: ウェブサイト／ブログの<br />文字エンコーディング
+        Enable ChangeEncoding in this blog: このウェブサイト／ブログの文字エンコーディング変更を有効にする
+        ChangeEncoding on each Template: テンプレート毎の文字エンコーディング指定を可能にする
+        Each Template: テンプレート毎に指定する
+        All Templates: 全体に対して指定する
         (default): （デフォルト）
+        Process Encode Charset: 文字エンコーディングを<br />指定する
+object_types:
+    template:
+        process_charset_encoder: boolean meta
+        template_charset_encoding: string meta
 blog_config_template: config.tmpl
 settings:
+    enable_thisblog:
+        scope: blog
+        default: 0
+    each_template:
+        scope: blog
+        default: 0
     encoding:
         scope: blog
         default: 'utf-8'
 callbacks:
     build_page: $CharsetEncoder::CharsetEncoder::encode
+    cms_pre_save.template: $CharsetEncoder::CharsetEncoder::cms_pre_save_template
+    MT::App::CMS::template_param.edit_template: $CharsetEncoder::CharsetEncoder::edit_template_param
