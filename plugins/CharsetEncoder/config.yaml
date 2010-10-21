@@ -4,26 +4,46 @@
 # Release 0.02 (May 28, 2010) add XML declaration.
 # Release 0.03 (Jun 22, 2010) fixed bug.
 # Release 0.04 (Jul 08, 2010) fixed bug.
+# Release 0.05 (Oct 21, 2010) Support charset encoding setting in each templates.
+# Release 0.06 (Oct 22, 2010) change setting action.
 #
 # Copyright (c) 2004-2010 Yujiro Araki
 
 name: CharsetEncoder
 id: CharsetEncoder
-version: 0.04
+version: 0.06
 author_link: http://www.koikikukan.com/
 author_name: Yujiro Araki
-plugin_link: http://www.koikikukan.com/archives/2010/05/25-015555.php
+plugin_link: http://github.com/koikikukan/mt-plugin-charset-encoder
 doc_link: http://www.koikikukan.com/archives/2010/05/25-015555.php
 description: <__trans phrase="Transfer charset encoding.">
 l10n_lexicon:
     ja:
         Transfer charset encoding.: ウェブサイト／ブログの文字エンコーディングを行います。
         Charset Encoding: ウェブサイト／ブログの<br />文字エンコーディング
+        Enable ChangeEncoding in this blog: 文字エンコーディング変更
+        ChangeEncoding on each Template: 文字エンコーディング指定
+        Each Template: テンプレート単位
+        All Templates: ブログ／ウェブサイト単位
         (default): （デフォルト）
+        Process Encode Charset: 文字エンコーディングを指定する
+object_types:
+    template:
+        process_charset_encoder: boolean meta
+        template_charset_encoding: string meta
 blog_config_template: config.tmpl
 settings:
+    enable_thisblog:
+        scope: blog
+        default: 0
+    each_template:
+        scope: blog
+        default: 0
     encoding:
         scope: blog
         default: 'utf-8'
 callbacks:
     build_page: $CharsetEncoder::CharsetEncoder::encode
+    cms_pre_save.template: $CharsetEncoder::CharsetEncoder::cms_pre_save_template
+    MT::App::CMS::template_source.edit_template: $CharsetEncoder::CharsetEncoder::add_script
+    MT::App::CMS::template_param.edit_template: $CharsetEncoder::CharsetEncoder::edit_template_param
