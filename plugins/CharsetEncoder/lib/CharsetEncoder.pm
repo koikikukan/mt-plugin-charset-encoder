@@ -6,6 +6,10 @@ use MT::Template;
 sub encode {
     my $cb = shift;
     my %args = @_;
+
+    my $ctx = $args{context};
+    return if $ctx->stash('isPageBute');
+
     my $html = $args{content};
     my $blog = $args{blog};
 
@@ -44,6 +48,13 @@ sub cms_pre_save_template {
 sub add_script {
     my ($cb, $app, $tmpl) = @_;
 
+    my $plugin = MT->component("CharsetEncoder");
+    my $blog_id = $app->blog->id;
+    my $enable = $plugin->get_config_value('enable_thisblog', 'blog:'.$blog_id);
+    my $separate = $plugin->get_config_value('each_template', 'blog:'.$blog_id);
+
+    return unless ($enable && $separate);
+
     my $old = <<HERE;
 <mt:setvarblock name="html_head" append="1">
 HERE
@@ -69,7 +80,11 @@ HERE
 
 sub edit_template_param {
     my ($cb, $app, $param, $tmpl) = @_;
-    return unless $param->{id} and $param->{type} eq 'index';
+
+    return unless $param->{id} and ($param->{type} eq 'index' ||
+                                    $param->{type} eq 'archive' ||
+                                    $param->{type} eq 'page' ||
+                                    $param->{type} eq 'individual');
 
     my $plugin = MT->component("CharsetEncoder");
     my $blog_id = $app->blog->id;
@@ -95,6 +110,7 @@ sub edit_template_param {
             label => $plugin->translate('Process Encode Charset') ,
             label_class => 'top_label',
             required => 0 });
+
         my $innerHTML = <<TEXT;
     <ul style="margin:10px 0 0 15px">
         <li><input type="radio" name="process_charset_encoder" id="process_charset_encoder_no" value="0" class="" mt:watch-change="1"$process_n onclick="toggleCharset('process_charset_encoder_no');" /> <label for="process_charset_encoder_no"><__trans phrase="No"></label></li>
@@ -107,8 +123,42 @@ sub edit_template_param {
     </ul>
 TEXT
         $newElement->innerHTML($innerHTML);
-        my $oldElement = $tmpl->getElementById('identifier');
-        $tmpl->insertAfter($newElement, $oldElement);
+        my $oldElement = $tmpl->getElementById('linked_file');
+        $tmpl->insertBefore($newElement, $oldElement);
+    }
+}
+
+sub page_bute {
+    my $cb = shift;
+    my ($output, %args) = @_;
+
+    my $blog = $args{blog};
+    my $tmpl = $args{template};
+
+    my $plugin = MT->component("CharsetEncoder");
+    my $enable = $plugin->get_config_value('enable_thisblog', 'blog:'.$blog->id);
+    if ($enable) {
+        my $separate = $plugin->get_config_value('each_template', 'blog:'.$blog->id);
+
+        my $encoding;
+        if ($separate) {
+            $encoding = $tmpl->template_charset_encoding;
+        } else {
+            $encoding = $plugin->get_config_value('encoding', 'blog:'.$blog->id);
+        }
+        if ($args{template}->process_charset_encoder || ($separate == 0)) {
+            return if !$encoding; # for 0.02
+            return if $encoding eq 'utf-8';
+
+            my $charset = ($encoding eq 'euc-jp') ? 'EUC-JP' : 'Shift_JIS' ;
+
+            $$output = Encode::encode($encoding, $$output);
+            $$output =~ s/encoding="\S+"/encoding="$charset"/g;
+            $$output =~ s/[^accept-]charset=\S+"/charset=$charset"/g;
+
+            my $ctx = $args{context};
+            $ctx->stash('isPageBute', 1);
+        }
     }
 }
 

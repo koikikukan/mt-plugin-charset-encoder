@@ -5,13 +5,14 @@
 # Release 0.03 (Jun 22, 2010) fixed bug.
 # Release 0.04 (Jul 08, 2010) fixed bug.
 # Release 0.05 (Oct 21, 2010) Support charset encoding setting in each templates.
-# Release 0.06 (Oct 22, 2010) change setting action.
+# Release 0.10 (Oct 22, 2010) Support charset encoding setting in archive templates.
+# Release 0.11 (Oct 26, 2010) for PageBute plugin.
 #
 # Copyright (c) 2004-2010 Yujiro Araki
 
 name: CharsetEncoder
 id: CharsetEncoder
-version: 0.06
+version: 0.11
 author_link: http://www.koikikukan.com/
 author_name: Yujiro Araki
 plugin_link: http://github.com/koikikukan/mt-plugin-charset-encoder
@@ -43,7 +44,10 @@ settings:
         scope: blog
         default: 'utf-8'
 callbacks:
-    build_page: $CharsetEncoder::CharsetEncoder::encode
+    page_bute: $CharsetEncoder::CharsetEncoder::page_bute
+    build_page:
+        code: $CharsetEncoder::CharsetEncoder::encode
+        priority: 10
     cms_pre_save.template: $CharsetEncoder::CharsetEncoder::cms_pre_save_template
     MT::App::CMS::template_source.edit_template: $CharsetEncoder::CharsetEncoder::add_script
     MT::App::CMS::template_param.edit_template: $CharsetEncoder::CharsetEncoder::edit_template_param
