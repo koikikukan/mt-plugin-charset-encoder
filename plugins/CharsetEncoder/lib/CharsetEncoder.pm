@@ -23,6 +23,10 @@ sub encode {
             $encoding = $tmpl->template_charset_encoding;
         } else {
             $encoding = $plugin->get_config_value('encoding', 'blog:'.$blog->id);
+            if ($encoding eq 'shift_jis') {
+                my $cp932 = $plugin->get_config_value('cp932', 'blog:'.$blog->id);
+                $encoding = 'cp932' if $cp932;
+            }
         }
         if ($tmpl->process_charset_encoder || ($separate == 0)) {
             return if !$encoding; # for 0.02
@@ -85,7 +89,6 @@ sub edit_template_param {
                                     $param->{type} eq 'archive' ||
                                     $param->{type} eq 'page' ||
                                     $param->{type} eq 'individual');
-
     my $plugin = MT->component("CharsetEncoder");
     my $blog_id = $app->blog->id;
     my $enable = $plugin->get_config_value('enable_thisblog', 'blog:'.$blog_id);
@@ -97,11 +100,13 @@ sub edit_template_param {
         my ($process_y, $process_n);
         $process ? $process_y = ' checked="checked"' : $process_n = ' checked="checked"';
         my $encode = $template->template_charset_encoding();
-        my ($encode_eucjp, $encode_shiftjis, $encode_utf8);
+        my ($encode_eucjp, $encode_shiftjis, $encode_utf8, $encode_cp932);
         if ($encode eq 'euc-jp') {
             $encode_eucjp = ' selected="selected"';
         } elsif ($encode eq 'shift_jis') {
             $encode_shiftjis = ' selected="selected"';
+        } elsif ($encode eq 'cp932') {
+            $encode_cp932 = ' selected="selected"';
         } else {
             $encode_utf8 = ' selected="selected"';
         }
@@ -111,6 +116,8 @@ sub edit_template_param {
             label_class => 'top_label',
             required => 0 });
 
+        my $message = $plugin->translate('Encoding CP932');
+
         my $innerHTML = <<TEXT;
     <ul style="margin:10px 0 0 15px">
         <li><input type="radio" name="process_charset_encoder" id="process_charset_encoder_no" value="0" class="" mt:watch-change="1"$process_n onclick="toggleCharset('process_charset_encoder_no');" /> <label for="process_charset_encoder_no"><__trans phrase="No"></label></li>
@@ -119,7 +126,9 @@ sub edit_template_param {
             <option value="utf-8"$encode_utf8 /> UTF-8<__trans phrase="(default)">
             <option value="euc-jp"$encode_eucjp /> EUC-JP
             <option value="shift_jis"$encode_shiftjis /> Shift_JIS
-        </select></li>
+            <option value="cp932"$encode_cp932 /> Shift_JIS($message)
+        </select>
+      </li>
     </ul>
 TEXT
         $newElement->innerHTML($innerHTML);

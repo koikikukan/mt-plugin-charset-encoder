@@ -7,12 +7,13 @@
 # Release 0.05 (Oct 21, 2010) Support charset encoding setting in each templates.
 # Release 0.10 (Oct 22, 2010) Support charset encoding setting in archive templates.
 # Release 0.11 (Oct 26, 2010) for PageBute plugin.
+# Release 0.12 (Dec 03, 2010) add CP932.
 #
 # Copyright (c) 2004-2010 Yujiro Araki
 
 name: CharsetEncoder
 id: CharsetEncoder
-version: 0.11
+version: 0.12
 author_link: http://www.koikikukan.com/
 author_name: Yujiro Araki
 plugin_link: http://github.com/koikikukan/mt-plugin-charset-encoder
@@ -28,6 +29,7 @@ l10n_lexicon:
         All Templates: ブログ／ウェブサイト単位
         (default): （デフォルト）
         Process Encode Charset: 文字エンコーディングを指定する
+        Encoding CP932: CP932でエンコーディングする
 object_types:
     template:
         process_charset_encoder: boolean meta
@@ -43,6 +45,9 @@ settings:
     encoding:
         scope: blog
         default: 'utf-8'
+    cp932:
+        scope: blog
+        default: 0
 callbacks:
     page_bute: $CharsetEncoder::CharsetEncoder::page_bute
     build_page:

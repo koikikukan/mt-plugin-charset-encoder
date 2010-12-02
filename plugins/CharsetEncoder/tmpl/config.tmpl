@@ -7,10 +7,16 @@ function toggleCharset(id, f) {
             toggleDisable('encoding_utf8', 0);
             toggleDisable('encoding_euc', 0);
             toggleDisable('encoding_sjis', 0);
+            if (f.encoding[2].checked) {
+                toggleDisable('cp932', 0);
+            } else {
+                toggleDisable('cp932', 1);
+            }
         } else if(f.each_template[0].checked) {
             toggleDisable('encoding_utf8', 1);
             toggleDisable('encoding_euc', 1);
             toggleDisable('encoding_sjis', 1);
+            toggleDisable('cp932', 1);
         }
     } else if("enable_thisblog_0" == id) {
         toggleDisable('each_template_1', 1);
@@ -18,18 +24,31 @@ function toggleCharset(id, f) {
         toggleDisable('encoding_utf8', 1);
         toggleDisable('encoding_euc', 1);
         toggleDisable('encoding_sjis', 1);
+        toggleDisable('cp932', 1);
     } else if ("each_template_1" == id) {
         toggleDisable('each_template_1', 0);
         toggleDisable('each_template_0', 0);
         toggleDisable('encoding_utf8', 1);
         toggleDisable('encoding_euc', 1);
         toggleDisable('encoding_sjis', 1);
+        toggleDisable('cp932', 1);
     } else if ("each_template_0" == id) {
         toggleDisable('each_template_1', 0);
         toggleDisable('each_template_0', 0);
         toggleDisable('encoding_utf8', 0);
         toggleDisable('encoding_euc', 0);
         toggleDisable('encoding_sjis', 0);
+        if (f.encoding[2].checked) {
+            toggleDisable('cp932', 0);
+        } else {
+            toggleDisable('cp932', 1);
+        }
+    } else if ("enable_charset_0" == id) {
+        toggleDisable('cp932', 1);
+    } else if ("enable_charset_1" == id) {
+        toggleDisable('cp932', 1);
+    } else if ("enable_charset_2" == id) {
+        toggleDisable('cp932', 0);
     }
     return false;
 }
@@ -52,9 +71,11 @@ function toggleCharset(id, f) {
 <mtapp:setting
   id="encoding"
   label="<__trans phrase="Charset Encoding">">
-  <input type="radio" id="encoding_utf8" name="encoding" value="utf-8" <mt:if name="encoding" eq="utf-8">checked="checked"</mt:if> /> UTF-8<__trans phrase="(default)">
-  &nbsp;
-  <input type="radio" id="encoding_euc" name="encoding" value="euc-jp" <mt:if name="encoding" eq="euc-jp">checked="checked"</mt:if> /> EUC-JP
-  &nbsp;&nbsp;
-  <input type="radio" id="encoding_sjis" name="encoding" value="shift_jis" <mt:if name="encoding" eq="shift_jis">checked="checked"</mt:if> /> Shift_JIS
+<ul>
+  <li><input type="radio" id="encoding_utf8" name="encoding" value="utf-8" <mt:if name="encoding" eq="utf-8">checked="checked"</mt:if> onclick="toggleCharset('enable_charset_0',this.form);" /> UTF-8<__trans phrase="(default)"></li>
+  <li><input type="radio" id="encoding_euc" name="encoding" value="euc-jp" <mt:if name="encoding" eq="euc-jp">checked="checked"</mt:if> onclick="toggleCharset('enable_charset_1',this.form);"/> EUC-JP</li>
+  <li><input type="radio" id="encoding_sjis" name="encoding" value="shift_jis" <mt:if name="encoding" eq="shift_jis">checked="checked"</mt:if> onclick="toggleCharset('enable_charset_2',this.form);" /> Shift_JIS
+&nbsp;&nbsp;&nbsp;
+  <input type="checkbox" id="cp932" name="cp932" <mt:if name="cp932">checked="checked"</mt:if> /> <__trans phrase="Encoding CP932"></li>
+</ul>
 </mtapp:setting>
