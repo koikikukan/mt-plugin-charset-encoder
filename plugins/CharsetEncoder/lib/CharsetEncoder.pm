@@ -172,4 +172,8 @@ sub page_bute {
     }
 }
 
+sub cb_template_source {
+  #when display plugin setting
+}
+
 1;

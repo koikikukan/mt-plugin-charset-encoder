@@ -12,12 +12,14 @@ function toggleCharset(id, f) {
             } else {
                 toggleDisable('cp932', 1);
             }
+            document.getElementById("encoding-field").style.display="block";
         } else if(f.each_template[0].checked) {
             toggleDisable('encoding_utf8', 1);
             toggleDisable('encoding_euc', 1);
             toggleDisable('encoding_sjis', 1);
             toggleDisable('cp932', 1);
         }
+        document.getElementById("each_template-field").style.display="block";
     } else if("enable_thisblog_0" == id) {
         toggleDisable('each_template_1', 1);
         toggleDisable('each_template_0', 1);
@@ -25,6 +27,8 @@ function toggleCharset(id, f) {
         toggleDisable('encoding_euc', 1);
         toggleDisable('encoding_sjis', 1);
         toggleDisable('cp932', 1);
+        document.getElementById("each_template-field").style.display="none";
+        document.getElementById("encoding-field").style.display="none";
     } else if ("each_template_1" == id) {
         toggleDisable('each_template_1', 0);
         toggleDisable('each_template_0', 0);
@@ -32,6 +36,7 @@ function toggleCharset(id, f) {
         toggleDisable('encoding_euc', 1);
         toggleDisable('encoding_sjis', 1);
         toggleDisable('cp932', 1);
+        document.getElementById("encoding-field").style.display="none";
     } else if ("each_template_0" == id) {
         toggleDisable('each_template_1', 0);
         toggleDisable('each_template_0', 0);
@@ -43,6 +48,7 @@ function toggleCharset(id, f) {
         } else {
             toggleDisable('cp932', 1);
         }
+        document.getElementById("encoding-field").style.display="block";
     } else if ("enable_charset_0" == id) {
         toggleDisable('cp932', 1);
     } else if ("enable_charset_1" == id) {
@@ -53,7 +59,12 @@ function toggleCharset(id, f) {
     return false;
 }
 </script>
-
+<mt:unless name="enable_thisblog">
+<style type="text/css">#each_template-field,#encoding-field { display: none; }</style>
+</mt:unless>
+<mt:if name="each_template">
+<style type="text/css">#encoding-field { display: none; }</style>
+</mt:if>
 <mtapp:setting
   id="enable_thisblog"
   label="<__trans phrase="Enable ChangeEncoding in this blog">">
@@ -72,7 +83,7 @@ function toggleCharset(id, f) {
   id="encoding"
   label="<__trans phrase="Charset Encoding">">
 <ul>
-  <li><input type="radio" id="encoding_utf8" name="encoding" value="utf-8" <mt:if name="encoding" eq="utf-8">checked="checked"</mt:if> onclick="toggleCharset('enable_charset_0',this.form);" /> UTF-8<__trans phrase="(default)"></li>
+  <li><input type="radio" id="encoding_utf8" name="encoding" value="utf-8" <mt:if name="encoding" eq="utf-8">checked="checked"<mt:else><mt:unless name="encoding">checked="checked"</mt:unless></mt:if> onclick="toggleCharset('enable_charset_0',this.form);" /> UTF-8<__trans phrase="(default)"></li>
   <li><input type="radio" id="encoding_euc" name="encoding" value="euc-jp" <mt:if name="encoding" eq="euc-jp">checked="checked"</mt:if> onclick="toggleCharset('enable_charset_1',this.form);"/> EUC-JP</li>
   <li><input type="radio" id="encoding_sjis" name="encoding" value="shift_jis" <mt:if name="encoding" eq="shift_jis">checked="checked"</mt:if> onclick="toggleCharset('enable_charset_2',this.form);" /> Shift_JIS
 &nbsp;&nbsp;&nbsp;
