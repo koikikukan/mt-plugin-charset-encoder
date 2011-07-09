@@ -36,7 +36,8 @@ sub encode {
 
             $$html = Encode::encode($encoding, $$html);
             $$html =~ s/encoding="\S+"/encoding="$charset"/g;
-            $$html =~ s/[^accept-]charset=\S+"/charset=$charset"/g;
+#            $$html =~ s/[^accept-]charset=\S+"/charset=$charset"/g;
+            $$html =~ s/;\scharset=\S+"/; charset=$charset"/g;
         }
     }
 }
