@@ -164,7 +164,8 @@ sub page_bute {
 
             $$output = Encode::encode($encoding, $$output);
             $$output =~ s/encoding="\S+"/encoding="$charset"/g;
-            $$output =~ s/[^accept-]charset=\S+"/charset=$charset"/g;
+#            $$html =~ s/[^accept-]charset=\S+"/charset=$charset"/g;
+            $$html =~ s/;\scharset=\S+"/; charset=$charset"/g;
 
             my $ctx = $args{context};
             $ctx->stash('isPageBute', 1);
