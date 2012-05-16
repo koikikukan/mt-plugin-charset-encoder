@@ -97,10 +97,14 @@ sub edit_template_param {
     if ($enable && $separate) {
         my $template = MT::Template->load({ id => $app->param('id') });
         my $process = $template->process_charset_encoder();
-        my ($process_y, $process_n);
+        my $process_y = '';
+        my $process_n = '';
+        my $encode_eucjp = '';
+        my $encode_shiftjis = '';
+        my $encode_utf8 = '';
+        my $encode_cp932 = '';
         $process ? $process_y = ' checked="checked"' : $process_n = ' checked="checked"';
         my $encode = $template->template_charset_encoding();
-        my ($encode_eucjp, $encode_shiftjis, $encode_utf8, $encode_cp932);
         if ($encode eq 'euc-jp') {
             $encode_eucjp = ' selected="selected"';
         } elsif ($encode eq 'shift_jis') {
@@ -169,6 +173,10 @@ sub page_bute {
             $ctx->stash('isPageBute', 1);
         }
     }
+}
+
+sub cb_template_source {
+  #when display plugin setting
 }
 
 1;

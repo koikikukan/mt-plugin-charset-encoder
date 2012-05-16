@@ -34,7 +34,7 @@ object_types:
     template:
         process_charset_encoder: boolean meta
         template_charset_encoding: string meta
-blog_config_template: config.tmpl
+blog_config_template: blog_charsetencoder.tmpl
 settings:
     enable_thisblog:
         scope: blog
@@ -56,3 +56,4 @@ callbacks:
     cms_pre_save.template: $CharsetEncoder::CharsetEncoder::cms_pre_save_template
     MT::App::CMS::template_source.edit_template: $CharsetEncoder::CharsetEncoder::add_script
     MT::App::CMS::template_param.edit_template: $CharsetEncoder::CharsetEncoder::edit_template_param
+#    MT::App::CMS::template_source.blog_charsetencoder: $CharsetEncoder::CharsetEncoder::cb_template_source
